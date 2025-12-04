@@ -1,0 +1,14 @@
+name: jp-politeness
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+    - datasets==2.19.0
+    - pandas
+    - python-dotenv
+    - google-generativeai
+    - openai
+    - tqdm
