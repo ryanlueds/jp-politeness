@@ -3,11 +3,12 @@ import MeCab
 import unidic_lite
 import statistics
 from collections import defaultdict
+import os
 
 def analyze():
     tagger = MeCab.Tagger(f"-d {unidic_lite.DICDIR}")
 
-    with open("data/rewritten_dataset.json", "r", encoding="utf-8") as f:
+    with open(os.path.join(os.path.dirname(__file__), "..", "data", "jcommonsense", "rewritten_dataset.json"), "r", encoding="utf-8") as f:
         data = json.load(f)
         
     stats = defaultdict(lambda: {"pos_counts": defaultdict(int), "token_counts": [], "jaccard_scores": []})
@@ -79,8 +80,7 @@ def analyze():
         # Content: 名詞 (Noun), 動詞 (Verb), 形容詞 (Adj), 副詞 (Adverb)
         # Note: Unidic uses kanji for POS
         func_count = s["pos_counts"].get("助詞", 0) + s["pos_counts"].get("助動詞", 0)
-        cont_count = s["pos_counts"].get("名詞", 0) + s["pos_counts"].get("動詞", 0) + \
-                     s["pos_counts"].get("形容詞", 0) + s["pos_counts"].get("副詞", 0)
+        cont_count = s["pos_counts"].get("名詞", 0) + s["pos_counts"].get("動詞", 0) + s["pos_counts"].get("形容詞", 0) + s["pos_counts"].get("副詞", 0)
         
         ratio = func_count / cont_count if cont_count > 0 else 0.0
         
