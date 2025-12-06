@@ -76,19 +76,36 @@ def analyze():
         
         total_pos = sum(s["pos_counts"].values())
         
-        # Functional: 助詞 (Particle), 助動詞 (Aux Verb)
-        # Content: 名詞 (Noun), 動詞 (Verb), 形容詞 (Adj), 副詞 (Adverb)
-        # Note: Unidic uses kanji for POS
         func_count = s["pos_counts"].get("助詞", 0) + s["pos_counts"].get("助動詞", 0)
         cont_count = s["pos_counts"].get("名詞", 0) + s["pos_counts"].get("動詞", 0) + s["pos_counts"].get("形容詞", 0) + s["pos_counts"].get("副詞", 0)
         
         ratio = func_count / cont_count if cont_count > 0 else 0.0
         
         # top 5 POS
+        pos_translation = {
+            "助詞": "Particle",
+            "助動詞": "Auxiliary Verb",
+            "名詞": "Noun",
+            "動詞": "Verb",
+            "形容詞": "Adjective",
+            "副詞": "Adverb",
+            "補助記号": "Auxiliary Symbol",
+            "代名詞": "Pronoun",
+            "感動詞": "Interjection",
+            "記号": "Symbol",
+            "形状詞": "Adjectival Noun",
+            "接続詞": "Conjunction",
+            "接頭辞": "Prefix",
+            "語:動詞": "Verb", # MeCab specific, sometimes verb is `語:動詞`
+            "語:名詞": "Noun", # MeCab specific, sometimes noun is `語:名詞`
+        }
         top_pos = sorted(s["pos_counts"].items(), key=lambda x: x[1], reverse=True)[:5]
-        top_pos_str = ", ".join([f"{p}({c/total_pos:.2f})" for p, c in top_pos])
+        top_pos_str = ", ".join([f"{pos_translation.get(p, p)}({c/total_pos:.2f})" for p, c in top_pos])
         
         print(f"{cat:<12} | {avg_len:<8.2f} | {avg_jaccard:<8.3f} | {ratio:<9.2f} | {top_pos_str}")
 
 if __name__ == "__main__":
+    print()
     analyze()
+    print()
+
