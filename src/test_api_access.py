@@ -6,6 +6,7 @@ load_dotenv()
 
 try:
     gemini_key = os.environ['GEMINI_API_KEY']
+    print(gemini_key)
     print("API Keys successfully loaded from environment variables.")
 except KeyError as e:
     print(f"ERROR: Environment variable {e} not set. Please set it using 'export' or 'setx'.")
