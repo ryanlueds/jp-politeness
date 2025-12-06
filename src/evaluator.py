@@ -19,7 +19,7 @@ genai.configure(api_key=GEMINI_API_KEY)
 
 MODEL_NAME = "gemini-2.5-flash-lite"
 generation_config = {
-    "temperature": 0.0,
+    "temperature": 0.8,
     "max_output_tokens": 512,
 }
 
@@ -132,7 +132,7 @@ def run_evaluation_pipeline(input_file: str = "data/rewritten_dataset.json"):
             
         style_results = evaluate_style(data, style)
         
-        output_filename = os.path.join(output_dir, f"{style}.accuracy.json")
+        output_filename = os.path.join(output_dir, f"{style}.accuracy_2_0.json")
         with open(output_filename, 'w', encoding='utf-8') as f:
             json.dump(style_results, f, ensure_ascii=False, indent=2)
             

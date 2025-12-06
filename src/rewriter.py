@@ -133,6 +133,7 @@ def process_dataset(output_file="data/rewritten_dataset.json", num_samples=1000)
 if __name__ == "__main__":
     process_dataset()
 
+# Read Chinese csv instead
 # import os
 # import json
 # import time
