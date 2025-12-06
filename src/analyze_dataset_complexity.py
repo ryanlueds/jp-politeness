@@ -33,10 +33,15 @@ def analyze():
         orig_text = item.get('original_question', "")
         if not orig_text: continue
         
-        orig_tokens, _ = get_analysis(orig_text)
+        orig_tokens, orig_pos = get_analysis(orig_text)
         orig_set = set(orig_tokens)
         
         if not orig_tokens: continue
+
+        stats["original_question"]["token_counts"].append(len(orig_tokens))
+        for pos in orig_pos:
+            stats["original_question"]["pos_counts"][pos] += 1
+        stats["original_question"]["jaccard_scores"].append(1.0)
 
         variations = item.get('variations', {})
         for v_type, v_text in variations.items():
@@ -59,10 +64,10 @@ def analyze():
             for pos in v_pos:
                 stats[v_type]["pos_counts"][pos] += 1
 
-    categories = ["casual", "standard", "sonkeigo", "kenjougo"]
+    categories = ["original_question", "casual", "standard", "sonkeigo", "kenjougo"]
     
     # pretty!
-    print(f"{'Category':<12} | {'Avg Len':<8} | {'Jaccard':<8} | {'Func/Cont':<9} | {'Top POS Distribution'}")
+    print(f"{'Category':<20} | {'Avg Len':<8} | {'Jaccard':<8} | {'Func/Cont':<9} | {'Top POS Distribution'}")
     print("-" * 100)
     
     for cat in categories:
@@ -72,7 +77,12 @@ def analyze():
             continue
             
         avg_len = statistics.mean(s["token_counts"])
-        avg_jaccard = statistics.mean(s["jaccard_scores"])
+        
+        # Handle Jaccard for original_question
+        if cat == "original_question":
+            avg_jaccard_str = f"{'N/A':<8}"
+        else:
+            avg_jaccard_str = f"{statistics.mean(s['jaccard_scores']):<8.3f}"
         
         total_pos = sum(s["pos_counts"].values())
         
@@ -102,7 +112,7 @@ def analyze():
         top_pos = sorted(s["pos_counts"].items(), key=lambda x: x[1], reverse=True)[:5]
         top_pos_str = ", ".join([f"{pos_translation.get(p, p)}({c/total_pos:.2f})" for p, c in top_pos])
         
-        print(f"{cat:<12} | {avg_len:<8.2f} | {avg_jaccard:<8.3f} | {ratio:<9.2f} | {top_pos_str}")
+        print(f"{cat:<20} | {avg_len:<8.2f} | {avg_jaccard_str} | {ratio:<9.2f} | {top_pos_str}")
 
 if __name__ == "__main__":
     print()
