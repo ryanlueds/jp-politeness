@@ -14,3 +14,8 @@ We used the [JGLUE](https://github.com/yahoojapan/JGLUE?tab=readme-ov-file) data
     ├── evaluator.py                    # evaluate model on rewritten dataset
     └── rewriter.py                     # generate rewritten dataset
 ```
+
+# To run
+```
+conda env create -f environment.yml
+```
